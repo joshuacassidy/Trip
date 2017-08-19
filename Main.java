@@ -3,16 +3,18 @@ public class Main {
     
 
     public static void main(String[] args){
-        LinkedList <String> placesToVisit = new LinkedList <String>();
+        LinkedList <String> placesToVisit = new LinkedList();
         addInOrder(placesToVisit,"Dublin");
         addInOrder(placesToVisit,"Wexford");
         addInOrder(placesToVisit,"Kerry");
         addInOrder(placesToVisit,"Belfast");
         addInOrder(placesToVisit,"Cork");
-        addInOrder(placesToVisit,"Galway");
-        addInOrder(placesToVisit,"Meath");
         addInOrder(placesToVisit,"Mayo");
-        printList(placesToVisit);
+
+        addInOrder(placesToVisit,"Galway");
+        addInOrder(placesToVisit,"Mayo");
+        addInOrder(placesToVisit,"Meath");
+        addInOrder(placesToVisit,"Meath");
         visit(placesToVisit);
 
 
@@ -25,26 +27,15 @@ public class Main {
 
 
     private static boolean addInOrder(LinkedList<String> linkedList,String newCity){
-        ListIterator <String> i = linkedList.listIterator();
-        while(i.hasNext()){
-            int comparison = i.next().compareTo(newCity);
-            if(comparison == 0){
+        for(String i : linkedList){
+            if(i.compareTo(newCity) == 0){
                 System.out.println(newCity + " is already included as a destination");
                 return false;
             }
-            else if(comparison > 0){
-                i.previous();
-                i.add(newCity);
-                return true;
-
-            }
-            else{
-                
-            }
-            }
-            
-            i.add(newCity);
-            return true;
+        }
+        linkedList.add(newCity);
+        Collections.sort(linkedList);
+        return true;
     }
     private static void visit(LinkedList cities){
         Scanner scanner = new Scanner(System.in);
