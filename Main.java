@@ -7,6 +7,7 @@ public class Main {
     
 
     public static void main(String[] args) throws IOException{
+        System.out.print("\033[H\033[2J");
         LinkedList <String> placesToVisit = new LinkedList();
         try(BufferedReader placesFile = new BufferedReader(new FileReader("src/Places.txt"))) {
             String placesData = placesFile.readLine();
