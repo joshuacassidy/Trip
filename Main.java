@@ -1,23 +1,21 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 public class Main {
     
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException{
         LinkedList <String> placesToVisit = new LinkedList();
-        addInOrder(placesToVisit,"Dublin");
-        addInOrder(placesToVisit,"Wexford");
-        addInOrder(placesToVisit,"Kerry");
-        addInOrder(placesToVisit,"Belfast");
-        addInOrder(placesToVisit,"Cork");
-        addInOrder(placesToVisit,"Mayo");
-
-        addInOrder(placesToVisit,"Galway");
-        addInOrder(placesToVisit,"Mayo");
-        addInOrder(placesToVisit,"Meath");
-        addInOrder(placesToVisit,"Meath");
+        try(BufferedReader placesFile = new BufferedReader(new FileReader("src/Places.txt"))) {
+            String placesData = placesFile.readLine();
+            while (placesData != null) {
+                addInOrder(placesToVisit,placesData);
+                placesData = placesFile.readLine();
+            }
+        }
         visit(placesToVisit);
-
-
     }
     private static void printList(LinkedList<String> linkedList){
          for(String i : linkedList){
@@ -29,7 +27,7 @@ public class Main {
     private static boolean addInOrder(LinkedList<String> linkedList,String newCity){
         for(String i : linkedList){
             if(i.compareTo(newCity) == 0){
-                System.out.println(newCity + " is already included as a destination");
+                System.out.printf("%s is already included as a destination\n",newCity);
                 return false;
             }
         }
@@ -48,44 +46,43 @@ public class Main {
             return;
         }
         else{
-            System.out.println("Now visiting " + listIterator.next());
+            System.out.printf("Now visiting %s\n", listIterator.next());
             printMenu();
         }
+        try{
         while(!quit){
-            int action = scanner.nextInt();
-            scanner.nextLine();
-            switch(action){
+                int action = scanner.nextInt();
+                scanner.nextLine();
+            switch(action) {
                 case 0:
                     System.out.println("Holiday over");
                     quit = true;
                     break;
                 case 1:
-                    if(!goingForward){
-                        if(listIterator.hasNext()){
+                    if (!goingForward) {
+                        if (listIterator.hasNext()) {
                             listIterator.next();
                         }
                         goingForward = true;
                     }
-                    if(listIterator.hasNext()){
-                        System.out.println("Now visiting " + listIterator.next());
-                    }
-                    else{
+                    if (listIterator.hasNext()) {
+                        System.out.printf("Now visiting %s\n", listIterator.next());
+                    } else {
                         System.out.println("Reached the end of the list");
                         goingForward = false;
                     }
                     printMenu();
                     break;
                 case 2:
-                    if(goingForward){
-                        if(listIterator.hasPrevious()){
+                    if (goingForward) {
+                        if (listIterator.hasPrevious()) {
                             listIterator.previous();
                         }
-                        goingForward =false;
+                        goingForward = false;
                     }
-                    if(listIterator.hasPrevious()){
-                        System.out.println("Now visiting " + listIterator.previous());
-                    }
-                    else{
+                    if (listIterator.hasPrevious()) {
+                        System.out.printf("Now visiting %s\n", listIterator.previous());
+                    } else {
                         System.out.println("We are at the start of the list");
                         goingForward = true;
                     }
@@ -95,15 +92,20 @@ public class Main {
                     break;
                 case 4:
                     printList(cities);
-
+                }
             }
         }
-
+        catch(InputMismatchException e){
+            System.out.println("Invalid input");
+        }
     }
 
     private static void printMenu(){
         System.out.println("Available actions: \npress: ");
-        System.out.println(" 0 - to quit \n 1 - go to next city \n 2 - go to previous city \n 3 - print menu options \n 4 - print full list of cities");
+        String [] options = {"to quit","go to next city","go to previous city","print menu options","print list of cities"};
+        for(String i: options){
+            System.out.printf("%d - %s\n",Arrays.asList(options).indexOf(i),i);
+        }
     }
 
 }
